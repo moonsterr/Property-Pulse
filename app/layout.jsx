@@ -1,5 +1,6 @@
 import React from 'react';
 import '@/app/index.css';
+import Navbar from '@/components/Navbar';
 
 export const metadate = {
   title: 'PropertyPulse | Find the Perfect Rental',
@@ -10,7 +11,8 @@ const MainLayout = ({ children }) => {
   return (
     <html>
       <body>
-        <div>{children}</div>;
+        <Navbar />
+        <main>{children}</main>;
       </body>
     </html>
   );
