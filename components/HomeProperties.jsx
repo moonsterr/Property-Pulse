@@ -4,19 +4,19 @@ import { fetchProperties } from '@/utils/requests.js';
 
 const HomeProperties = async () => {
   const properties = await fetchProperties();
-  const recentProperties = properties
-    .sort(() => Math.random() - Math.random())
-    .slice(0, 3);
+  if (properties) {
+    properties.sort(() => Math.random() - Math.random()).slice(0, 3);
+  }
   return (
     <>
       <section className="home-properties-section">
         <div className="home-properties-container">
           <h2 className="home-properties-heading">Recent Properties</h2>
           <div className="home-properties-grid">
-            {recentProperties.length === 0 ? (
+            {propertiess.length === 0 ? (
               <p>no properties found</p>
             ) : (
-              recentProperties.map((property) => (
+              properties.map((property) => (
                 <PropertyCard key={property._id} property={property} />
               ))
             )}

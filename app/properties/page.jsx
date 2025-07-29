@@ -1,9 +1,11 @@
 import PropertyCard from '@/components/PropertyCard';
-import { fetchProperties  } from '@/utils/requests';
+import { fetchProperties } from '@/utils/requests';
 
 const PropertiesPage = async () => {
   const properties = await fetchProperties();
-  properties.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  if (properties) {
+    properties.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  }
   return (
     <section className="properties-section">
       <div className="container">
