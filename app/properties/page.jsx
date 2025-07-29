@@ -1,14 +1,24 @@
-import React from 'react';
-import Link from 'next/link';
-import Hero from '@/components/Hero';
-const Page = () => {
+import PropertyCard from '@/components/PropertyCard';
+import { fetchProperties  } from '@/utils/requests';
+
+const PropertiesPage = async () => {
+  const properties = await fetchProperties();
+  properties.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   return (
-    <div>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-      <Link href="../">Go back</Link>
-      <Hero />
-    </div>
+    <section className="properties-section">
+      <div className="container">
+        {properties.length === 0 ? (
+          <p>no properties found</p>
+        ) : (
+          <div className="property-grid">
+            {properties.map((property) => (
+              <PropertyCard key={property._id} property={property} />
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
   );
 };
 
-export default Page;
+export default PropertiesPage;

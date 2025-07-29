@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import logo from '@/assets/images/logo-white.png';
 import profileDefault from '@/assets/images/profile.png';
@@ -8,12 +8,26 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { FaGoogle } from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
+import { signIn, signOut, useSession, getProviders } from 'next-auth/react';
+
 const Navbar = () => {
+  const { data: session } = useSession();
+  const profileImage = session?.user?.image;
   const [toggleMobile, setToggleMobile] = useState(false);
   const [toggleProfile, setToggleProfile] = useState(false);
-  const [isLoggedIn, setLoggedIn] = useState(false);
+  const [providers, setProviders] = useState(null);
 
   const pathname = usePathname();
+
+  useEffect(() => {
+    const setAuthProviders = async () => {
+      const res = await getProviders();
+      setProviders(res);
+    };
+    setAuthProviders();
+  }, []);
+
+  console.log('providers', providers);
   return (
     <nav className="nav">
       <div className="nav-container">
@@ -64,7 +78,7 @@ const Navbar = () => {
               >
                 Properties
               </Link>
-              {isLoggedIn && (
+              {session && (
                 <Link
                   href="/properties/add"
                   className={`nav-link  ${
@@ -77,16 +91,25 @@ const Navbar = () => {
             </div>
           </div>
 
-          {!isLoggedIn && (
+          {!session && (
             <div className="auth-button-wrapper">
-              <button className="auth-button">
-                <FaGoogle className="icon" />
-                <span>Login or Register</span>
-              </button>
+              {providers &&
+                Object.values(providers).map((provider, index) => {
+                  return (
+                    <button
+                      onClick={() => signIn(provider.id)}
+                      key={index}
+                      className="auth-button"
+                    >
+                      <FaGoogle className="icon" />
+                      <span>Login or Register</span>
+                    </button>
+                  );
+                })}
             </div>
           )}
 
-          {isLoggedIn && (
+          {session && (
             <div className="user-menu">
               <Link href="messages" className="notification-button">
                 <button className="notification-icon">
@@ -112,13 +135,35 @@ const Navbar = () => {
                   className="profile-button"
                   onClick={() => setToggleProfile((prevToggle) => !prevToggle)}
                 >
-                  <Image src={profileDefault} alt="" />
+                  <Image
+                    src={profileImage || profileDefault}
+                    alt=""
+                    width={50}
+                    height={50}
+                  />
                 </button>
                 {toggleProfile && (
                   <div id="user-menu" className="profile-dropdown hidden">
-                    <Link href="/profile">Your Profile</Link>
-                    <Link href="/savedproperties">Saved Properties</Link>
-                    <button>Sign Out</button>
+                    <Link
+                      onClick={() => setToggleProfile(false)}
+                      href="/profile"
+                    >
+                      Your Profile
+                    </Link>
+                    <Link
+                      onClick={() => setToggleProfile(false)}
+                      href="/savedproperties"
+                    >
+                      Saved Properties
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setToggleProfile(false);
+                        signOut();
+                      }}
+                    >
+                      Sign Out
+                    </button>
                   </div>
                 )}
               </div>
@@ -143,7 +188,7 @@ const Navbar = () => {
           >
             Properties
           </Link>
-          {isLoggedIn && (
+          {session && (
             <Link
               href="/property/add"
               className={`mobile-nav-link ${
@@ -153,12 +198,18 @@ const Navbar = () => {
               Add Property
             </Link>
           )}
-          {!isLoggedIn && (
-            <button className="mobile-auth-button">
-              <i className="fa-brands fa-google"></i>
-              <span>Login or Register</span>
-            </button>
-          )}
+          {!session &&
+            providers &&
+            Object.values(providers).map((provider, index) => (
+              <button
+                onClick={() => signIn(provider.id)}
+                key={index}
+                className="mobile-auth-button"
+              >
+                <i className="fa-brands fa-google"></i>
+                <span>Login or Register</span>
+              </button>
+            ))}
         </div>
       )}
     </nav>
