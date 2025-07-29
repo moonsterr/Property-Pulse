@@ -1,4 +1,4 @@
-// const apiDomain = process.env.NEXT_PUBLIC_API_DOMAIN || null;
+const apiDomain = process.env.NEXT_PUBLIC_API_DOMAIN || null;
 
 async function fetchProperties() {
   try {
@@ -10,6 +10,7 @@ async function fetchProperties() {
       throw new Error('failed to fetch data');
     }
     const data = await res.json();
+
     return data.data;
   } catch (error) {
     console.log(error);
