@@ -3,6 +3,8 @@ import User from '@/models/User';
 import Property from '@/models/Property';
 import { getSessionUser } from '@/utils/getSessionUser';
 
+export const dynamic = 'force-dynamic';
+
 export const POST = async (request) => {
   try {
     await connectDB();
