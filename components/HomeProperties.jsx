@@ -13,7 +13,7 @@ const HomeProperties = async () => {
         <div className="home-properties-container">
           <h2 className="home-properties-heading">Recent Properties</h2>
           <div className="home-properties-grid">
-            {propertiess.length === 0 ? (
+            {properties.length === 0 ? (
               <p>no properties found</p>
             ) : (
               properties.map((property) => (
