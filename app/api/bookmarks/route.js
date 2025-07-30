@@ -17,7 +17,7 @@ export const POST = async (request) => {
     const { userId } = sessionUser;
     const user = await User.findById(userId);
 
-    let isBookmarked = user.bookmakrs.includes(propertyId);
+    let isBookmarked = user.bookmarks.includes(propertyId);
     let message;
     if (isBookmarked) {
       user.bookmarks.pull(propertyId);

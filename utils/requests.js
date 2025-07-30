@@ -5,7 +5,7 @@ async function fetchProperties() {
     if (!apiDomain) {
       return [];
     }
-    const res = await fetch(`/properties`);
+    const res = await fetch(`${apiDomain}/properties`);
     if (!res.ok) {
       throw new Error('failed to fetch data');
     }
@@ -24,7 +24,7 @@ async function fetchProperty(id) {
       return null;
     }
 
-    const res = await fetch(`/properties/${id}`);
+    const res = await fetch(`${apiDomain}/properties/${id}`);
     if (!res.ok) {
       throw new Error('failed to fetch data');
     }

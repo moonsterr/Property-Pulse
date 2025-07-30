@@ -28,6 +28,7 @@ const PropertyId = () => {
       if (!id) return;
       try {
         const data = await fetchProperty(id);
+        console.log('data is fetched 100%');
         setProperty(data);
       } catch (error) {
         console.log(error.message);
