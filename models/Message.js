@@ -19,11 +19,11 @@ const MessageSchema = new Schema(
     },
     name: {
       type: String,
-      required: [required, 'Name is required'],
+      required: [true, 'Name is required'],
     },
     email: {
       type: String,
-      required: [required, 'Email is required'],
+      required: [true, 'Email is required'],
     },
     phone: {
       type: String,
@@ -39,6 +39,6 @@ const MessageSchema = new Schema(
   { timestamps: true }
 );
 
-const Message = models.Message || model(MessageSchema);
+const Message = models.Message || model('Message', MessageSchema);
 
 export default Message;
