@@ -338,5 +338,5 @@ const PropertyEditForm = () => {
     )
   );
 };
-
+export const dynamic = 'force-dynamic';
 export default PropertyEditForm;

@@ -11,5 +11,4 @@ const PropertyEditPage = () => {
     </section>
   );
 };
-
 export default PropertyEditPage;

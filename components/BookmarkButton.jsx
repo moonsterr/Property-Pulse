@@ -7,6 +7,7 @@ const BookmarkButton = ({ property }) => {
   const { data: session } = useSession();
   const userId = session?.user?.id;
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const handleClick = async () => {
     if (!userId) {
@@ -35,7 +36,49 @@ const BookmarkButton = ({ property }) => {
       toast.error('something went wrong');
     }
   };
-  return (
+
+  useEffect(() => {
+    async function checkBookmarkStatus() {
+      if (!userId) {
+        toast.error('You need to sign in to bookmark a property');
+        return;
+      }
+      try {
+        const res = await fetch('/api/bookmarks/check', {
+          method: 'POST',
+          headers: {
+            'Content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            propertyId: property._id,
+          }),
+        });
+
+        if (res.status !== 200) {
+          return toast.error('something went wrong');
+        }
+        const data = await res.json();
+        setIsBookmarked(data.isBookmarked);
+      } catch (error) {
+        console.log(error);
+        toast.error('something went wrong');
+      } finally {
+        setLoading(false);
+      }
+    }
+    checkBookmarkStatus();
+  }, [property._id, userId]);
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  return isBookmarked ? (
+    <button
+      onClick={handleClick}
+      className="property-sidebar-btn property-bookmark-btn bookmark-red"
+    >
+      <FaBookmark className="property-sidebar-btn-icon" /> Bookmark Property
+    </button>
+  ) : (
     <button
       onClick={handleClick}
       className="property-sidebar-btn property-bookmark-btn"
@@ -44,5 +87,5 @@ const BookmarkButton = ({ property }) => {
     </button>
   );
 };
-
+export const dynamic = 'force-dynamic';
 export default BookmarkButton;

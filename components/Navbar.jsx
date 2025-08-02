@@ -152,7 +152,7 @@ const Navbar = () => {
                     </Link>
                     <Link
                       onClick={() => setToggleProfile(false)}
-                      href="/savedproperties"
+                      href="/properties/saved"
                     >
                       Saved Properties
                     </Link>

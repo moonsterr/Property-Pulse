@@ -60,7 +60,7 @@ const PropertyId = () => {
               <BookmarkButton property={property} />
               <ShareButton property={property} />
               {/* Contact Form */}
-              <ContactForm />
+              <ContactForm property={property} />
             </aside>
           </div>
         </div>
@@ -87,5 +87,4 @@ const PropertyId = () => {
     </>
   );
 };
-
 export default PropertyId;

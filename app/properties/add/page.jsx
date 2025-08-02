@@ -11,5 +11,4 @@ const PropertyAddPage = () => {
     </section>
   );
 };
-
 export default PropertyAddPage;
