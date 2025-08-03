@@ -3,7 +3,7 @@ const apiDomain = process.env.NEXT_PUBLIC_API_DOMAIN || null;
 async function fetchProperties(page, size) {
   try {
     if (!apiDomain) {
-      return [];
+      return { properties: [], total: 0 };
     }
     const res = await fetch(
       `${apiDomain}/properties?page=${page ? page : 1}&size=${
@@ -18,6 +18,7 @@ async function fetchProperties(page, size) {
     return data;
   } catch (error) {
     console.log(error);
+    return { properties: [], total: 0 }; // Fallback shape
   }
 }
 

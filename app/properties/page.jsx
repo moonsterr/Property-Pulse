@@ -8,11 +8,11 @@ const PropertiesPage = async ({ searchParams }) => {
   const page = parseInt(searchParams.page || '1', 10);
   const size = parseInt(searchParams.size || '3', 10);
   const { properties } = await fetchProperties(page, size);
-  if (properties) {
-    properties.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  }
   if (!properties) {
     return <Spinner />;
+  }
+  if (properties) {
+    properties.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   }
   return (
     <section className="properties-section">

@@ -4,7 +4,8 @@ import { fetchProperties } from '@/utils/requests.js';
 import Spinner from './Spinner';
 
 const HomeProperties = async () => {
-  const { properties, total } = await fetchProperties();
+  const data = await fetchProperties();
+  const properties = data?.properties || [];
   if (!properties) return <Spinner />;
 
   const limitedProperties = [...properties]
