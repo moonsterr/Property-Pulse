@@ -20,7 +20,6 @@ const PropertyCard = ({ property }) => {
       return `${rates.nightly.toLocaleString()}/night`;
     }
   };
-  console.log('this si propert images', property);
   return (
     <div className="property-card">
       <Image

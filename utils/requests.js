@@ -6,7 +6,9 @@ async function fetchProperties(page, size) {
       return [];
     }
     const res = await fetch(
-      `${apiDomain}/properties?page=${page}&size=${size}`
+      `${apiDomain}/properties?page=${page ? page : 1}&size=${
+        size ? size : '99'
+      }`
     );
     if (!res.ok) {
       throw new Error('failed to fetch data');

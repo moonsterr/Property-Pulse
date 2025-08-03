@@ -222,7 +222,7 @@ const PropertyAddForm = () => {
             { id: 'smart_tv', label: 'Smart TV' },
             { id: 'coffee', label: 'Coffee Maker' },
           ].map(({ id, label }) => (
-            <div className="amenity-item">
+            <div key={id} className="amenity-item">
               <input
                 type="checkbox"
                 id={`amenity_${id}`}
