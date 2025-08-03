@@ -1,17 +1,19 @@
 const apiDomain = process.env.NEXT_PUBLIC_API_DOMAIN || null;
 
-async function fetchProperties() {
+async function fetchProperties(page, size) {
   try {
     if (!apiDomain) {
       return [];
     }
-    const res = await fetch(`${apiDomain}/properties`);
+    const res = await fetch(
+      `${apiDomain}/properties?page=${page}&size=${size}`
+    );
     if (!res.ok) {
       throw new Error('failed to fetch data');
     }
     const data = await res.json();
 
-    return data.data;
+    return data;
   } catch (error) {
     console.log(error);
   }

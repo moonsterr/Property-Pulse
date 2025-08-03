@@ -3,9 +3,11 @@ import { useState, useEffect } from 'react';
 import { FaBookmark } from 'react-icons/fa6';
 import { useSession } from 'next-auth/react';
 import { toast } from 'react-toastify';
+
 const BookmarkButton = ({ property }) => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const userId = session?.user?.id;
+
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -14,6 +16,7 @@ const BookmarkButton = ({ property }) => {
       toast.error('You need to sign in to bookmark a property');
       return;
     }
+
     try {
       const res = await fetch('/api/bookmarks', {
         method: 'POST',
@@ -25,24 +28,27 @@ const BookmarkButton = ({ property }) => {
         }),
       });
 
-      if (res.status !== 200) {
-        return toast.error('something went wrong');
-      }
       const data = await res.json();
-      toast.success(data.message);
+
+      if (res.status !== 200) {
+        return toast.error(data.message || 'Something went wrong');
+      }
+
       setIsBookmarked(data.isBookmarked);
+      toast.success(data.message || 'Bookmark status updated');
     } catch (error) {
-      console.log(error);
-      toast.error('something went wrong');
+      console.error(error);
+      toast.error('Something went wrong');
     }
   };
 
   useEffect(() => {
-    async function checkBookmarkStatus() {
+    const checkBookmarkStatus = async () => {
       if (!userId) {
-        toast.error('You need to sign in to bookmark a property');
+        setLoading(false); // Don't get stuck
         return;
       }
+
       try {
         const res = await fetch('/api/bookmarks/check', {
           method: 'POST',
@@ -54,38 +60,40 @@ const BookmarkButton = ({ property }) => {
           }),
         });
 
-        if (res.status !== 200) {
-          return toast.error('something went wrong');
-        }
         const data = await res.json();
-        setIsBookmarked(data.isBookmarked);
+
+        if (res.status === 200) {
+          setIsBookmarked(data.isBookmarked);
+        } else {
+          toast.error(data.message || 'Something went wrong');
+        }
       } catch (error) {
-        console.log(error);
-        toast.error('something went wrong');
+        console.error(error);
+        toast.error('Something went wrong');
       } finally {
         setLoading(false);
       }
-    }
+    };
+
     checkBookmarkStatus();
   }, [property._id, userId]);
+
   if (loading) {
     return <p>Loading...</p>;
   }
-  return isBookmarked ? (
+
+  return (
     <button
       onClick={handleClick}
-      className="property-sidebar-btn property-bookmark-btn bookmark-red"
+      className={`property-sidebar-btn property-bookmark-btn ${
+        isBookmarked ? 'bookmark-red' : ''
+      }`}
     >
-      <FaBookmark className="property-sidebar-btn-icon" /> Bookmark Property
-    </button>
-  ) : (
-    <button
-      onClick={handleClick}
-      className="property-sidebar-btn property-bookmark-btn"
-    >
-      <FaBookmark className="property-sidebar-btn-icon" /> Bookmark Property
+      <FaBookmark className="property-sidebar-btn-icon" />
+      {isBookmarked ? 'Bookmarked' : 'Bookmark Property'}
     </button>
   );
 };
-export const dynamic = 'force-dynamic';
+
+// export const dynamic = 'force-dynamic';
 export default BookmarkButton;

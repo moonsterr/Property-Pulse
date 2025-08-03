@@ -90,7 +90,7 @@ const ProfilePage = () => {
                 <p>You have no property listings</p>
               )}
               {properties.map((property) => (
-                <div className="listing">
+                <div key={property._id} className="listing">
                   <Link href={`/properties/${property._id}`}>
                     <Image
                       className="listing-image"

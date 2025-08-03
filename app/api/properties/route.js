@@ -5,8 +5,14 @@ import { firebaseUpload } from '@/utils/firebaseUpload';
 export const GET = async (request) => {
   try {
     await connectDB();
-    const properties = await Property.find({});
-    return new Response(JSON.stringify({ data: properties }), {
+
+    const page = request.nextUrl.searchParams.get('page') || 1;
+    const pageSize = request.nextUrl.searchParams.get('size') || 3;
+
+    const skip = (page - 1) * pageSize;
+    const total = await Property.countDocuments({});
+    const properties = await Property.find({}).skip(skip).limit(pageSize);
+    return new Response(JSON.stringify({ properties, total }), {
       status: 200,
     });
   } catch (error) {

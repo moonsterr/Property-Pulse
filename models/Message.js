@@ -12,7 +12,7 @@ const MessageSchema = new Schema(
       ref: 'User',
       required: true,
     },
-    Property: {
+    property: {
       type: Schema.Types.ObjectId,
       ref: 'Property',
       required: true,
@@ -33,7 +33,7 @@ const MessageSchema = new Schema(
     },
     read: {
       type: Boolean,
-      required: true,
+      default: false,
     },
   },
   { timestamps: true }

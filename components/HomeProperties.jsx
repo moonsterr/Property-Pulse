@@ -4,7 +4,7 @@ import { fetchProperties } from '@/utils/requests.js';
 import Spinner from './Spinner';
 
 const HomeProperties = async () => {
-  const properties = await fetchProperties();
+  const { properties, total } = await fetchProperties();
   if (properties) {
     properties.sort(() => Math.random() - Math.random()).slice(0, 3);
   }

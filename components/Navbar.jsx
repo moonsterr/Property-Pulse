@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { FaGoogle } from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
 import { signIn, signOut, useSession, getProviders } from 'next-auth/react';
+import UnreadMessageCount from './UnreadMessageCount';
 
 const Navbar = () => {
   const { data: session } = useSession();
@@ -111,7 +112,7 @@ const Navbar = () => {
 
           {session && (
             <div className="user-menu">
-              <Link href="messages" className="notification-button">
+              <Link href="/messages" className="notification-button">
                 <button className="notification-icon">
                   <svg
                     viewBox="0 0 24 24"
@@ -126,7 +127,7 @@ const Navbar = () => {
                     />
                   </svg>
                 </button>
-                <span className="notification-count">2</span>
+                <UnreadMessageCount session={session} />
               </Link>
 
               <div className="profile-menu-wrapper">
