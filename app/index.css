@@ -195,6 +195,7 @@ body {
   display: flex;
   flex-direction: column;
   min-width: 12rem;
+  z-index: 100;
 }
 
 .profile-dropdown a,

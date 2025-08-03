@@ -6,7 +6,7 @@ async function fetchProperties(page, size) {
       return { properties: [], total: 0 };
     }
     const res = await fetch(
-      `${apiDomain}/properties?page=${page ? page : 1}&size=${
+      `${apiDomain}/properties?page=${page && page > 0 ? page : 1}&size=${
         size ? size : '99'
       }`
     );
